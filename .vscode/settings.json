@@ -1,0 +1,6 @@
+{
+  "clang-tidy.compilerArgsBefore": [
+    "-Isrc",
+    "--extra-arg=--std=c++17"
+  ]
+}
