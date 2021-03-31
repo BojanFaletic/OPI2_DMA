@@ -1,6 +1,6 @@
-.PHONY: clean run help build ph_build
+.PHONY: clean run help build
 .DEFAULT_GOAL := run
-#.SILENT:
+.SILENT:
 
 ### FILE STRUCTURE ###
 PROJECT=dma
@@ -16,14 +16,11 @@ PROJ_OBJ = build/obj/$(PROJECT).o
 CC_PATH=/tools/SDK/2018.2/gnu/aarch32/lin/gcc-arm-linux-gnueabi/bin/
 CC=$(CC_PATH)arm-linux-gnueabihf-g++
 LDFLAGS=
-CPPFLAGS=--std=c++17 -I./src
+CPPFLAGS=--std=c++17 -I./header
 CXXFLAGS:=$(CXXFLAGS) -Werror -Wall -Wextra -Wconversion -Wunreachable-code \
 	-Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wunused
 
 
-fffff:
-	echo $(SRC_FILES)
-	echo $(OBJ_FILES)
 
 build: build/dma
 
@@ -57,10 +54,6 @@ build/dma: $(PROJ_OBJ) $(OBJ_FILES)
 	$(CC) $(LDFLAGS) -o $@ $^
 
 
-ph_build: $(OBJ_FILES)
-
-
-# build objects
 build/obj/%.o: src/%.cpp
 	echo "Building $< --> $@"
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
