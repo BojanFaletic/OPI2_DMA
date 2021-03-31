@@ -1,23 +1,23 @@
 #ifndef MEMORY_HPP__
 #define MEMORY_HPP__
 
-#include <stdint.h>
 #include <fcntl.h>
+#include <iostream>
 #include <stdlib.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include <iostream>
+
+#include <cstring>
 
 #include "constants.hpp"
 
-#define u32 uint32_t
 const int PAGE_SIZE = 4096;
 
-/*
-int open_devmem();
-volatile uint32_t *mapPeripheral(int memfd, int addr);
+void close_devmem();
+void open_devmem();
+u32 *mapPeripheral(int addr);
+void unmapPeripheral(u32 *address);
 void makeVirtPhysPage(void *virtAddr, void *physAddr);
-void freeVirtPhysPare(void *virtAddr);
-*/
+void freeVirtPhysPage(void *virtAddr);
 
 #endif

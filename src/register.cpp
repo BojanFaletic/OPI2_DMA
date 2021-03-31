@@ -2,44 +2,20 @@
 
 using namespace std;
 
-static map<int, int> mapped_pages;
+Register::Register(volatile u32 *base, u32 offset) {
+  assertm(offset >= PAGE_SIZE, "Offset is larger than one page of memory");
 
-Register::Register(u32 base, u32 offset): offset(offset)
-{
-    base_hash = base / PAGE_SIZE;
-    auto it = mapped_pages.find(base_hash);
-    if (it == mapped_pages.end())
-    {
-        pair<int, int> empty_block = {base_hash, 1};
-        mapped_pages.insert(empty_block);
-        // init page
-        cout << "page init!\n";
-    }
-    else
-    {
-        it->second++;
-    }
+  phy_address =
+      reinterpret_cast<volatile u32 *>(reinterpret_cast<u64>(base) + offset);
 }
 
-Register::~Register()
-{
-    auto it = mapped_pages.find(base_hash);
-    if (it != mapped_pages.end())
-    {
-        it->second--;
+void Register::write(u32 value) { *phy_address = value; }
 
-        if (it->second == 0)
-        {
-            // free page
-            cout << "page destroyed\n";
-        }
-    }
-}
+u32 Register::read() { return *phy_address; }
 
-void Register::write()
-{
-}
+void Register::operator=(const u32 value) { this->write(value); }
 
-void Register::read()
-{
+void Register::operator=(const u32 &value) {
+  u32 v = value;
+  this->write(v);
 }

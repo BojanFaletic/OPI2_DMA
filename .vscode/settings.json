@@ -1,6 +1,23 @@
 {
   "clang-tidy.compilerArgsBefore": [
-    "-Isrc",
+    "-Iheader",
     "--extra-arg=--std=c++17"
-  ]
+  ],
+  "files.associations": {
+    "hash_map": "cpp",
+    "*.tcc": "cpp",
+    "deque": "cpp",
+    "list": "cpp",
+    "string": "cpp",
+    "unordered_map": "cpp",
+    "unordered_set": "cpp",
+    "vector": "cpp",
+    "fstream": "cpp",
+    "iosfwd": "cpp",
+    "istream": "cpp",
+    "limits": "cpp",
+    "sstream": "cpp",
+    "stop_token": "cpp",
+    "streambuf": "cpp"
+  }
 }

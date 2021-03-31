@@ -1,9 +1,9 @@
-.PHONY: clean run help build
-.DEFAULT_GOAL := run
+.PHONY: clean run help build check
+.DEFAULT_GOAL := check
 .SILENT:
 
 ### FILE STRUCTURE ###
-PROJECT=dma
+PROJECT=main
 
 SRC_FILES = $(wildcard src/*.cpp)
 OBJ_FILES :=  $(patsubst src/%.cpp,build/obj/%.o,$(SRC_FILES))
@@ -16,11 +16,14 @@ PROJ_OBJ = build/obj/$(PROJECT).o
 CC_PATH=/tools/SDK/2018.2/gnu/aarch32/lin/gcc-arm-linux-gnueabi/bin/
 CC=$(CC_PATH)arm-linux-gnueabihf-g++
 LDFLAGS=
-CPPFLAGS=--std=c++17 -I./header
+CPPFLAGS=--std=c++17 -I./header -O3
 CXXFLAGS:=$(CXXFLAGS) -Werror -Wall -Wextra -Wconversion -Wunreachable-code \
 	-Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wunused
 
 
+check:
+	make clean
+	make build
 
 build: build/dma
 
@@ -31,7 +34,7 @@ clean:
 	rm -f build/obj/* build/dma
 
 summary:
-	wc -l $(PROJECT).cpp src/*
+	wc -l $(PROJECT).cpp src/* header/*
 
 help:
 	@echo "** HELP **"
@@ -58,5 +61,5 @@ build/obj/%.o: src/%.cpp
 	echo "Building $< --> $@"
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
-build/obj/dma.o: dma.cpp
+build/obj/main.o: main.cpp
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
