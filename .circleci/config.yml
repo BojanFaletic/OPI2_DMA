@@ -8,4 +8,5 @@ jobs:
     steps:
       - sudo apt install clang
       - checkout
+      - run: mkdir build build/obj
       - run: make CC=clang++

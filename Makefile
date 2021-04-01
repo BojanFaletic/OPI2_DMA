@@ -20,7 +20,6 @@ CPPFLAGS=--std=c++17 -I./header -O0
 CXXFLAGS:=$(CXXFLAGS) -Werror -Wall -Wextra -Wconversion -Wunreachable-code \
 	-Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wunused
 
-
 check:
 	make clean
 	make build
