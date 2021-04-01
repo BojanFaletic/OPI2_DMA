@@ -20,6 +20,8 @@ Register &Register::operator=(const u32 value) {
 }
 
 std::ostream &operator<<(std::ostream &os, Register &r) {
-  os << r.read();
+  os << hex;
+  os << "0x"<<r.read() << " ";
+  os << dec;
   return os;
 }

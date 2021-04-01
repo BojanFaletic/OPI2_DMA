@@ -16,7 +16,7 @@ PROJ_OBJ = build/obj/$(PROJECT).o
 CC_PATH=/tools/SDK/2018.2/gnu/aarch32/lin/gcc-arm-linux-gnueabi/bin/
 CC=$(CC_PATH)arm-linux-gnueabihf-g++
 LDFLAGS=
-CPPFLAGS=--std=c++17 -I./header -O3
+CPPFLAGS=--std=c++17 -I./header -O0
 CXXFLAGS:=$(CXXFLAGS) -Werror -Wall -Wextra -Wconversion -Wunreachable-code \
 	-Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wunused
 

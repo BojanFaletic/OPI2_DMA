@@ -19,9 +19,9 @@ int test_dma() {
   ///////////////////////////////////////////////////////////////////
   // register definition
   ///////////////////////////////////////////////////////////////////
-  Register DMA_SEC{DMA, 0x20};
-  Register DMA_AUTO_GATE{DMA, 0x28};
-  Register DMA_STA{DMA, 0x30};
+  Register DMA_SEC_REG{DMA, 0x20};
+  Register DMA_AUTO_GATE_REG{DMA, 0x28};
+  Register DMA_STA_REG{DMA, 0x30};
 
   u32 channel = 5;
   u32 channel_offset = channel * 0x40 + 0x100;
@@ -69,16 +69,33 @@ int test_dma() {
   srcArray[11] = 0;
 
   // DMA ///////////////
-  DMA_CB *cb1 = reinterpret_cast<DMA_CB*>(virt_page_cb);
+  DMA_CB *cb1 = reinterpret_cast<DMA_CB *>(virt_page_cb);
+  cb1->configuration = 1; // USE SDRAM
   cb1->byte_counter = 12;
-  cb1->source_addr = reinterpret_cast<u64>(phy_page_src);
-  cb1->destination_addr = reinterpret_cast<u64>(phy_page_dst);
+  cb1->source_addr = reinterpret_cast<u32>(phy_page_src);
+  cb1->destination_addr = reinterpret_cast<u32>(phy_page_dst);
   cb1->link = 0xfffff800; // stop link
 
   // follow block diagram
-
   // enable DMA
   DMA_EN_REG = 1;
+
+  // write channel descriptor
+  DMA_DESC_ADDR_REG = reinterpret_cast<u32>(virt_page_cb);
+
+  usleep(100);
+  cout << "DMA_STA_REG: " << DMA_STA_REG << endl;
+  cout << "DMA_EN_REG: " << DMA_EN_REG << endl;
+  cout << "DMA_PAU_REG: " << DMA_EN_REG << endl;
+  cout << "DMA_DESC_ADDR_REG: " << DMA_DESC_ADDR_REG << endl;
+  cout << "DMA_DFG_REG: " << DMA_CFG_REG << endl;
+  cout << "DMA_CUR_SRC_REG: " << DMA_CUR_SRC_REG << endl;
+  cout << "DMA_CUR_DEST_REG: " << DMA_CUR_DEST_REG << endl;
+  cout << "DMA_BCNT_LEFT_REG: " << DMA_BCNT_LEFT_REG << endl;
+  cout << "DMA_PARA_REG: " << DMA_PARA_REG << endl;
+  cout << "DMA_FDESC_ADDR_REG: " << DMA_FDESC_ADDR_REG << endl;
+  cout << "DMA_PKG_NUM_REG: " << DMA_PKG_NUM_REG << endl;
+  sleep(1);
 
   // check if msg arrived
   cout << "Send: " << srcArray << endl;
