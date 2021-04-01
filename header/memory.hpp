@@ -3,10 +3,10 @@
 
 #include <fcntl.h>
 #include <iostream>
+#include <limits>
 #include <stdlib.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include <limits>
 
 #include <cstring>
 
@@ -21,5 +21,5 @@ void unmapPeripheral(u32 *address);
 void makeVirtPhysPage(void **virtAddr, void **physAddr);
 void freeVirtPhysPage(void *virtAddr);
 u32 address_to_value(void *v);
-u32* value_to_address(u32 v);
+u32 *value_to_address(u32 v);
 #endif
