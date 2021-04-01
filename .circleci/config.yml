@@ -7,5 +7,5 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - run: sudo apt-get -y install clang
+      - run: sudo apt-get install -y clang-8
       - run: make CC=clang++
