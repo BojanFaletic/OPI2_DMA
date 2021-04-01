@@ -38,5 +38,12 @@
     "thread": "cpp",
     "tuple": "cpp",
     "condition_variable": "cpp"
-  }
+  },
+  "cSpell.words": [
+    "BCNT",
+    "SDRAM",
+    "assertm",
+    "commity",
+    "memfd"
+  ]
 }
