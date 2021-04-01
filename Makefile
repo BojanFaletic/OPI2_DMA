@@ -22,7 +22,7 @@ CXXFLAGS:=$(CXXFLAGS) -Werror -Wall -Wextra -Wconversion -Wunreachable-code \
 
 check:
 	make clean
-	make build
+	make build CC=clang++
 
 build: build/dma
 
