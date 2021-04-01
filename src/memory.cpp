@@ -71,7 +71,7 @@ void freeVirtPhysPage(void *virtAddr) {
 }
 
 u32 address_to_value(void *v) {
-  return reinterpret_cast<u64>(v) & numeric_limits<u32>::max();
+  return reinterpret_cast<u64>(v) & 0xffffffff;
 }
 
 u32 *value_to_address(u32 v) { return reinterpret_cast<u32 *>(v); }

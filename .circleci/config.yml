@@ -1,5 +1,4 @@
-version: 0.1
-
+version: 2.1
 
 jobs:
   build:
@@ -10,4 +9,4 @@ jobs:
       - checkout
       - run: mkdir build build/obj
       - run: sudo apt-get update; sudo apt-get install clang
-      - run: make CC=clang++
+      - run: make test CC=clang++

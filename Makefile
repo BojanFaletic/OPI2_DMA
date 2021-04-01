@@ -1,4 +1,4 @@
-.PHONY: clean run help build check
+.PHONY: clean run help build check test
 .DEFAULT_GOAL := check
 .SILENT:
 
@@ -14,15 +14,27 @@ PROJ_OBJ = build/obj/$(PROJECT).o
 
 ### COMPILER FLAGS ###
 CC_PATH=/tools/SDK/2018.2/gnu/aarch32/lin/gcc-arm-linux-gnueabi/bin/
-CC:=$(CC_PATH)arm-linux-gnueabihf-g++
+CC=$(CC_PATH)arm-linux-gnueabihf-g++
 LDFLAGS=
 CPPFLAGS=--std=c++17 -I./header -O0
 CXXFLAGS:=$(CXXFLAGS) -Werror -Wall -Wextra -Wconversion -Wunreachable-code \
 	-Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wunused
 
+# COMMANDS
+CLEAN=rm -f build/obj/*.o build/dma test/*.o test/main
+
 check:
-	make clean
-	make build CC=clang++
+	$(CLEAN)
+	make build CC=clang++ -j8
+	$(CLEAN)
+
+test:
+	$(CLEAN)
+	make -s test/main CC=clang++ -j8
+	./test/main
+
+test/main: build/obj/test_main.o $(OBJ_FILES)
+	$(CC) $(LDFLAGS) -o $@ $^
 
 build: build/dma
 
@@ -30,7 +42,7 @@ run: build/dma
 	scp build/dma bojan@orangepi:~/driver/dma/out/test
 
 clean:
-	rm -f build/obj/* build/dma
+	$(CLEAN)
 
 summary:
 	wc -l $(PROJECT).cpp src/* header/*
@@ -57,8 +69,11 @@ build/dma: $(PROJ_OBJ) $(OBJ_FILES)
 
 
 build/obj/%.o: src/%.cpp
-	echo "Building $< --> $@"
+	echo "$< -> $@"
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 build/obj/main.o: main.cpp
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+
+build/obj/test_main.o: test/main.cpp
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<

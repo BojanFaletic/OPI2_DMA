@@ -2,6 +2,8 @@
 ## Example of dma driver
 https://github.com/Xilinx/linux-xlnx/blob/master/drivers/dma/dmatest.c
 
+## OPI2 old repo
+https://github.com/OrangePiLibra/OrangePiH2_kernel/blob/master/drivers/dma/at_hdmac_regs.h
 
 ## HW
 https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/sun8i-h2-plus-orangepi-zero.dts

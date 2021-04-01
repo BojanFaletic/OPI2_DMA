@@ -12,15 +12,36 @@ typedef struct DMA_CB_ {
   u32 link;
 } DMA_CB;
 
+/* lli: linked list ltem, the DMA block descriptor */
+struct sunxi_dma_lli {
+  u32 cfg;   /* DMA configuration */
+  u32 src;   /* Source address */
+  u32 dst;   /* Destination address */
+  u32 len;   /* Length of buffers */
+  u32 para;  /* Parameter register */
+  u32 p_lln; /* Next lli physical address */
+  u32 link;  /* Next lli virtual address (only for cpu) */
+} __attribute__((packed));
 
-
+/*
+void reset_DMA(Register &r){
+  r = r;
+}
+*/
 
 int test_dma() {
   HW_unit DMA{0x01c02000};
   HW_unit CCU{0x01c20000};
 
+
   ///////////////////////////////////////////////////////////////////
-  // register definition
+  // register definition DMA
+  ///////////////////////////////////////////////////////////////////
+  Register BUS_SOFT_RST_REG0{CCU, 0x2c0};
+
+
+  ///////////////////////////////////////////////////////////////////
+  // register definition DMA
   ///////////////////////////////////////////////////////////////////
   Register DMA_SEC_REG{DMA, 0x20};
   Register DMA_AUTO_GATE_REG{DMA, 0x28};
@@ -72,12 +93,14 @@ int test_dma() {
   srcArray[11] = 0;
 
   // DMA ///////////////
-  DMA_CB *cb1 = reinterpret_cast<DMA_CB *>(virt_page_cb);
-  cb1->configuration = 1; // USE SDRAM
-  cb1->byte_counter = 12;
-  cb1->source_addr = address_to_value(phy_page_src);
-  cb1->destination_addr = address_to_value(phy_page_dst);
-  cb1->link = 0xfffff800; // stop link
+  sunxi_dma_lli *cb1 = reinterpret_cast<sunxi_dma_lli *>(virt_page_cb);
+  cb1->cfg = 0;
+  cb1->src = address_to_value(phy_page_src);
+  cb1->dst = address_to_value(phy_page_dst);
+  cb1->len = 12;
+  cb1->para = 0;
+  cb1->p_lln = 0xfffff800;
+  cb1->link = address_to_value(phy_page_cb);    // stop link
 
   // follow block diagram
   // enable DMA
