@@ -18,8 +18,7 @@ public:
   void write(u32 value);
   u32 read();
 
-  void operator=(const u32 value);
-  void operator=(const u32 &value);
+  Register& operator=(const u32 value);
   friend std::ostream &operator<<(std::ostream &os, Register &r);
 };
 

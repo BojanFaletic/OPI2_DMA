@@ -14,11 +14,9 @@ void Register::write(u32 value) { *phy_address = value; }
 
 u32 Register::read() { return *phy_address; }
 
-void Register::operator=(const u32 value) { this->write(value); }
-
-void Register::operator=(const u32 &value) {
-  u32 v = value;
-  this->write(v);
+Register &Register::operator=(const u32 value) {
+  this->write(value);
+  return *this;
 }
 
 std::ostream &operator<<(std::ostream &os, Register &r) {

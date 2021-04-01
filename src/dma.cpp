@@ -26,7 +26,7 @@ int test_dma() {
   u32 channel = 5;
   u32 channel_offset = channel * 0x40 + 0x100;
 
-  Register DMA_EN_STA{DMA, channel_offset};
+  Register DMA_EN_REG{DMA, channel_offset};
   Register DMA_PAU_REG{DMA, channel_offset + 0x4};
   Register DMA_DESC_ADDR_REG{DMA, channel_offset + 0x8};
 
@@ -77,6 +77,8 @@ int test_dma() {
 
   // follow block diagram
 
+  // enable DMA
+  DMA_EN_REG = 1;
 
   // check if msg arrived
   cout << "Send: " << srcArray << endl;
