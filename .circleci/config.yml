@@ -7,7 +7,7 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - run: sudo apt update; sudo apt upgrade; sudo apt install build-essential xz-utils curl; 
+      - run: sudo apt install build-essential xz-utils curl; 
       - run: curl -SL http://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz | tar -xJC .
       - run: mv clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04 clang_9.0.0
       - run: sudo mv clang_9.0.0 /usr/local
