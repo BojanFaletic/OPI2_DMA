@@ -15,3 +15,7 @@ https://en.wikipedia.org/wiki/Input%E2%80%93output_memory_management_unit
 
 ## Main documentation
 https://linux-sunxi.org/H3#Variants
+
+
+## Block Diagram of engine
+![alt text](img/dma.png)

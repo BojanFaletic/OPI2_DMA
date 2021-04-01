@@ -69,11 +69,18 @@ int test_dma() {
   srcArray[11] = 0;
 
   // DMA ///////////////
+  DMA_CB *cb1 = reinterpret_cast<DMA_CB*>(virt_page_cb);
+  cb1->byte_counter = 12;
+  cb1->source_addr = reinterpret_cast<u64>(phy_page_src);
+  cb1->destination_addr = reinterpret_cast<u64>(phy_page_dst);
+  cb1->link = 0xfffff800; // stop link
 
-  cout << "DMA region\n";
-  cout << DMA_STA << " end" << endl;
+  // follow block diagram
 
-  cout << "Debug: " << srcArray << endl;
+
+  // check if msg arrived
+  cout << "Send: " << srcArray << endl;
+  cout << "Send debug: " << static_cast<char *>(virt_page_dst) << endl;
   /////////////////////
 
   freeVirtPhysPage(virt_page_src);
