@@ -7,10 +7,5 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - run: sudo apt install build-essential xz-utils curl; 
-      - run: curl -SL http://releases.llvm.org/9.0.0/clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz | tar -xJC .
-      - run: mv clang+llvm-9.0.0-x86_64-linux-gnu-ubuntu-18.04 clang_9.0.0
-      - run: sudo mv clang_9.0.0 /usr/local
-      - run: export PATH=/usr/local/clang_9.0.0/bin:$PATH
-      - run: export LD_LIBRARY_PATH=/usr/local/clang_9.0.0/lib:$LD_LIBRARY_PATH
+      - run: sudo apt-get update; sudo apt-get install clang
       - run: make CC=clang++
