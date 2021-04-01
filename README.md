@@ -19,3 +19,7 @@ https://linux-sunxi.org/H3#Variants
 
 ## Block Diagram of engine
 ![alt text](img/dma.png)
+
+
+## Current output
+![alt text](img/output.png)
