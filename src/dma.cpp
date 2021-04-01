@@ -2,6 +2,16 @@
 
 using namespace std;
 
+// descriptor information for DMA
+typedef struct DMA_CB_ {
+  u32 configuration;
+  u32 source_addr;
+  u32 destination_addr;
+  u32 byte_counter;
+  u32 commity_parameter;
+  u32 link;
+} DMA_CB;
+
 int test_dma() {
   HW_unit DMA{0x01c02000};
   HW_unit CCU{0x01c20000};
@@ -39,14 +49,31 @@ int test_dma() {
   void *virt_page_cb = nullptr;
   void *phy_page_cb = nullptr;
 
-  makeVirtPhysPage(virt_page_src, phy_page_src);
-  makeVirtPhysPage(virt_page_dst, phy_page_dst);
-  makeVirtPhysPage(virt_page_cb, phy_page_cb);
+  makeVirtPhysPage(&virt_page_src, &phy_page_src);
+  makeVirtPhysPage(&virt_page_dst, &phy_page_dst);
+  makeVirtPhysPage(&virt_page_cb, &phy_page_cb);
+
+  // write test bytes in to source page
+  char *srcArray = static_cast<char *>(virt_page_src);
+  srcArray[0] = 'h';
+  srcArray[1] = 'e';
+  srcArray[2] = 'l';
+  srcArray[3] = 'l';
+  srcArray[4] = 'o';
+  srcArray[5] = ' ';
+  srcArray[6] = 'w';
+  srcArray[7] = 'o';
+  srcArray[8] = 'r';
+  srcArray[9] = 'l';
+  srcArray[10] = 'd';
+  srcArray[11] = 0;
 
   // DMA ///////////////
 
   cout << "DMA region\n";
   cout << DMA_STA << " end" << endl;
+
+  cout << "Debug: " << srcArray << endl;
   /////////////////////
 
   freeVirtPhysPage(virt_page_src);

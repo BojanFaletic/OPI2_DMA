@@ -39,18 +39,18 @@ void unmapPeripheral(u32 *address) {
   std::cout << "unmapping " << status << std::endl;
 }
 
-void makeVirtPhysPage(void *virtAddr, void *physAddr) {
+void makeVirtPhysPage(void **virtAddr, void **physAddr) {
   // allocate 1 page on RAM
-  virtAddr = static_cast<u8 *>(valloc(PAGE_SIZE));
+  *virtAddr = static_cast<u8 *>(valloc(PAGE_SIZE));
 
   // force page into RAM and then lock it there
-  static_cast<u8*>(virtAddr)[0] = 1;
+  static_cast<u8*>(*virtAddr)[0] = 1;
 
   // lock page
-  mlock(virtAddr, PAGE_SIZE);
+  mlock(*virtAddr, PAGE_SIZE);
 
   // write zeros to page
-  memset(virtAddr, 0, PAGE_SIZE);
+  memset(*virtAddr, 0, PAGE_SIZE);
 
   // Determine the phyiscal address for this page
   uint64_t pageInfo;
@@ -60,9 +60,9 @@ void makeVirtPhysPage(void *virtAddr, void *physAddr) {
   lseek(file, offset, SEEK_SET);
   read(file, &pageInfo, 8);
 
-  physAddr = reinterpret_cast<u8 *>(pageInfo * PAGE_SIZE);
+  *physAddr = reinterpret_cast<u8 *>(pageInfo * PAGE_SIZE);
 
-  printf("makeVirtPhsPage: %p -> %p\n", virtAddr, physAddr);
+  printf("makeVirtPhsPage: %p -> %p\n", *virtAddr, *physAddr);
 }
 
 void freeVirtPhysPage(void *virtAddr) {

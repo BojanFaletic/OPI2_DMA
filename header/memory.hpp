@@ -17,7 +17,7 @@ void close_devmem();
 void open_devmem();
 u32 *mapPeripheral(int addr);
 void unmapPeripheral(u32 *address);
-void makeVirtPhysPage(void *virtAddr, void *physAddr);
+void makeVirtPhysPage(void **virtAddr, void **physAddr);
 void freeVirtPhysPage(void *virtAddr);
 
 #endif
