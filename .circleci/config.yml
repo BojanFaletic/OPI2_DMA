@@ -5,9 +5,9 @@ jobs:
     machine:
       image: ubuntu-2004:202010-01
     working_directory: ~/project
-    apt:
-      packages:
-        - clang
+    dependencies:
+      pre:
+      - sudo apt-get update; sudo apt-get install clang
     steps:
       - checkout
       - run: make CC=clang++
