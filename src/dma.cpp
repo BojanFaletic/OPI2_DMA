@@ -12,6 +12,9 @@ typedef struct DMA_CB_ {
   u32 link;
 } DMA_CB;
 
+
+
+
 int test_dma() {
   HW_unit DMA{0x01c02000};
   HW_unit CCU{0x01c20000};
@@ -72,8 +75,8 @@ int test_dma() {
   DMA_CB *cb1 = reinterpret_cast<DMA_CB *>(virt_page_cb);
   cb1->configuration = 1; // USE SDRAM
   cb1->byte_counter = 12;
-  cb1->source_addr = reinterpret_cast<u32>(phy_page_src);
-  cb1->destination_addr = reinterpret_cast<u32>(phy_page_dst);
+  cb1->source_addr = address_to_value(phy_page_src);
+  cb1->destination_addr = address_to_value(phy_page_dst);
   cb1->link = 0xfffff800; // stop link
 
   // follow block diagram
@@ -81,7 +84,7 @@ int test_dma() {
   DMA_EN_REG = 1;
 
   // write channel descriptor
-  DMA_DESC_ADDR_REG = reinterpret_cast<u32>(virt_page_cb);
+  DMA_DESC_ADDR_REG = address_to_value(virt_page_cb);
 
   usleep(100);
   cout << "DMA_STA_REG: " << DMA_STA_REG << endl;
