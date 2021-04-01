@@ -18,6 +18,11 @@
     "limits": "cpp",
     "sstream": "cpp",
     "stop_token": "cpp",
-    "streambuf": "cpp"
+    "streambuf": "cpp",
+    "new": "cpp",
+    "functional": "cpp",
+    "typeinfo": "cpp",
+    "variant": "cpp",
+    "*.ipp": "cpp"
   }
 }

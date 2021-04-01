@@ -1,8 +1,8 @@
 #ifndef HW_UNIT_HPP__
 #define HW_UNIT_HPP__
 
-#include "memory.h"
-#include "register.hpp"
+#include "constants.hpp"
+#include "memory.hpp"
 
 class HW_unit {
 private:
@@ -11,6 +11,8 @@ private:
 public:
   HW_unit(u32 base_address);
   ~HW_unit();
+
+  u32* address();
 };
 
 #endif
