@@ -23,22 +23,16 @@ struct sunxi_dma_lli {
   u32 link;  /* Next lli virtual address (only for cpu) */
 } __attribute__((packed));
 
-/*
-void reset_DMA(Register &r){
-  r = r;
-}
-*/
+void reset_DMA(Register &r) { cout << "Dma is:" << r[6] << endl; }
 
 int test_dma() {
   HW_unit DMA{0x01c02000};
   HW_unit CCU{0x01c20000};
 
-
   ///////////////////////////////////////////////////////////////////
   // register definition DMA
   ///////////////////////////////////////////////////////////////////
   Register BUS_SOFT_RST_REG0{CCU, 0x2c0};
-
 
   ///////////////////////////////////////////////////////////////////
   // register definition DMA
@@ -92,6 +86,9 @@ int test_dma() {
   srcArray[10] = 'd';
   srcArray[11] = 0;
 
+  // reset dma
+  reset_DMA(BUS_SOFT_RST_REG0);
+
   // DMA ///////////////
   sunxi_dma_lli *cb1 = reinterpret_cast<sunxi_dma_lli *>(virt_page_cb);
   cb1->cfg = 0;
@@ -100,7 +97,7 @@ int test_dma() {
   cb1->len = 12;
   cb1->para = 0;
   cb1->p_lln = 0xfffff800;
-  cb1->link = address_to_value(phy_page_cb);    // stop link
+  cb1->link = address_to_value(phy_page_cb); // stop link
 
   // follow block diagram
   // enable DMA

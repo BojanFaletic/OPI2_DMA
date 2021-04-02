@@ -36,7 +36,8 @@ test:
 test/main: build/obj/test_main.o $(OBJ_FILES)
 	$(CC) $(LDFLAGS) -o $@ $^
 
-build: build/dma
+build:
+	make -s build/dma -j8
 
 run: build/dma
 	scp build/dma bojan@orangepi:~/driver/dma/out/test

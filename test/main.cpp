@@ -23,13 +23,13 @@ void test_set_bit() {
   u32 a = 8;
   Register R{&a};
 
-  R.set_bit(0);
+  R[0] = 1;
   EQ(R == (a | 1), "Set bit");
 
-  R.set_bit(1);
+  R[1] = 1;
   EQ(R == (a | 1 | 2), "Set bit");
 
-  R.set_bit(2);
+  R[2] = 1;
   EQ(R == (a | 1 | 2 | 4), "Set bit");
 }
 
@@ -37,21 +37,31 @@ void test_clear_bit() {
   u32 a = 0xff;
   Register R{&a};
 
-  R.clear_bit(0);
+  R[0] = 0;
   EQ(R == 0xfe, "Clear bit");
 
-  R.clear_bit(1);
+  R[1] = 0;
   EQ(R == 0xfc, "Clear bit");
 
-  R.clear_bit(2);
+  R[2] = 0;
   EQ(R == 0xf8, "Clear bit");
 }
+
+void test_check_bit(){
+  u32 a = 0xf;
+  Register R{&a};
+
+  EQ(R[3] == 1, "Bit equal");
+
+}
+
 
 int main() {
 
   test_assignment();
   test_set_bit();
   test_clear_bit();
+  test_check_bit();
 
   return 0;
 }
