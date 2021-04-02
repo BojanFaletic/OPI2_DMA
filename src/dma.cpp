@@ -1,8 +1,9 @@
 #include "dma.hpp"
 #include "hexdump.hpp"
 
-
 using namespace std;
+
+#define NORMAL_WAIT	(8 << 0)
 
 // descriptor information for DMA
 typedef struct DMA_CB_ {
@@ -21,7 +22,6 @@ struct sunxi_dma_lli {
   u32 dst;   /* Destination address */
   u32 len;   /* Length of buffers */
   u32 para;  /* Parameter register */
-  u32 p_lln; /* Next lli physical address */
   u32 link;  /* Next lli virtual address (only for cpu) */
 } __attribute__((packed));
 
@@ -105,19 +105,9 @@ int test_dma() {
   cb1->src = (u32)phy_page_src;
   cb1->dst = (u32)phy_page_dst;
   cb1->len = 12;
-  cb1->para = 0;
-  cb1->p_lln = stop_addr;
+  cb1->para = NORMAL_WAIT;
   cb1->link = stop_addr;
 
-
-  sunxi_dma_lli *cb2 = reinterpret_cast<sunxi_dma_lli *>(offset_ptr);
-  cb2->cfg = 0;
-  cb2->src = address_to_value(phy_page_src);
-  cb2->dst = address_to_value(phy_page_dst);
-  cb2->len = 12;
-  cb2->para = 0;
-  cb2->p_lln = stop_addr;
-  cb2->link =  stop_addr;
 
 
   // follow block diagram
@@ -125,7 +115,7 @@ int test_dma() {
   // disable pause
 
   // write channel descriptor
-  DMA_SEC_REG[channel] = 0;
+  DMA_SEC_REG[channel] = 1;
   DMA_DESC_ADDR_REG = (u32)(phy_page_cb);
 
   usleep(100);
