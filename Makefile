@@ -20,6 +20,10 @@ CPPFLAGS=--std=c++17 -I./header -O0
 CXXFLAGS:=$(CXXFLAGS) -Werror -Wall -Wextra -Wconversion -Wunreachable-code \
 	-Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wunused
 
+# for testing
+CXXFLAGS= -Wall -Wextra
+
+
 # COMMANDS
 CLEAN=rm -f build/obj/*.o build/dma test/*.o test/main
 

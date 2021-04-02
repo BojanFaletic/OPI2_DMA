@@ -1,4 +1,6 @@
 #include "dma.hpp"
+#include "hexdump.hpp"
+
 
 using namespace std;
 
@@ -23,7 +25,11 @@ struct sunxi_dma_lli {
   u32 link;  /* Next lli virtual address (only for cpu) */
 } __attribute__((packed));
 
-void reset_DMA(Register &r) { cout << "Dma is:" << r[6] << endl; }
+void reset_DMA(Register &r) {
+  r[6] = 0;
+  r[6] = 1;
+}
+
 
 int test_dma() {
   HW_unit DMA{0x01c02000};
@@ -90,21 +96,37 @@ int test_dma() {
   reset_DMA(BUS_SOFT_RST_REG0);
 
   // DMA ///////////////
+  void* offset_ptr = reinterpret_cast<void*> (reinterpret_cast<u64>(virt_page_cb) + 0x40);
+
+  u32 stop_addr = 0xfffff800;
+
   sunxi_dma_lli *cb1 = reinterpret_cast<sunxi_dma_lli *>(virt_page_cb);
   cb1->cfg = 0;
-  cb1->src = address_to_value(phy_page_src);
-  cb1->dst = address_to_value(phy_page_dst);
+  cb1->src = (u32)phy_page_src;
+  cb1->dst = (u32)phy_page_dst;
   cb1->len = 12;
   cb1->para = 0;
-  cb1->p_lln = 0xfffff800;
-  cb1->link = address_to_value(phy_page_cb); // stop link
+  cb1->p_lln = stop_addr;
+  cb1->link = stop_addr;
+
+
+  sunxi_dma_lli *cb2 = reinterpret_cast<sunxi_dma_lli *>(offset_ptr);
+  cb2->cfg = 0;
+  cb2->src = address_to_value(phy_page_src);
+  cb2->dst = address_to_value(phy_page_dst);
+  cb2->len = 12;
+  cb2->para = 0;
+  cb2->p_lln = stop_addr;
+  cb2->link =  stop_addr;
+
 
   // follow block diagram
   // enable DMA
-  DMA_EN_REG = 1;
+  // disable pause
 
   // write channel descriptor
-  DMA_DESC_ADDR_REG = address_to_value(virt_page_cb);
+  DMA_SEC_REG[channel] = 0;
+  DMA_DESC_ADDR_REG = (u32)(phy_page_cb);
 
   usleep(100);
   cout << "DMA_STA_REG: " << DMA_STA_REG << endl;
@@ -118,11 +140,31 @@ int test_dma() {
   cout << "DMA_PARA_REG: " << DMA_PARA_REG << endl;
   cout << "DMA_FDESC_ADDR_REG: " << DMA_FDESC_ADDR_REG << endl;
   cout << "DMA_PKG_NUM_REG: " << DMA_PKG_NUM_REG << endl;
+
+  DMA_EN_REG = 1;
+  usleep(100);
+  cout << "---------------------------\n";
+  cout << "DMA_STA_REG: " << DMA_STA_REG << endl;
+  cout << "DMA_EN_REG: " << DMA_EN_REG << endl;
+  cout << "DMA_PAU_REG: " << DMA_EN_REG << endl;
+  cout << "DMA_DESC_ADDR_REG: " << DMA_DESC_ADDR_REG << endl;
+  cout << "DMA_DFG_REG: " << DMA_CFG_REG << endl;
+  cout << "DMA_CUR_SRC_REG: " << DMA_CUR_SRC_REG << endl;
+  cout << "DMA_CUR_DEST_REG: " << DMA_CUR_DEST_REG << endl;
+  cout << "DMA_BCNT_LEFT_REG: " << DMA_BCNT_LEFT_REG << endl;
+  cout << "DMA_PARA_REG: " << DMA_PARA_REG << endl;
+  cout << "DMA_FDESC_ADDR_REG: " << DMA_FDESC_ADDR_REG << endl;
+  cout << "DMA_PKG_NUM_REG: " << DMA_PKG_NUM_REG << endl;
+
+
+
   sleep(1);
 
   // check if msg arrived
   cout << "Send: " << srcArray << endl;
+  cout << Hexdump(virt_page_src, 64) << std::endl;
   cout << "Send debug: " << static_cast<char *>(virt_page_dst) << endl;
+  cout << Hexdump(virt_page_dst, 64) << std::endl;
   /////////////////////
 
   freeVirtPhysPage(virt_page_src);
