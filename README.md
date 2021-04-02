@@ -29,3 +29,4 @@ https://github.com/Wallacoloo/Raspberry-Pi-DMA-Example/blob/master/dma-example.c
 
 ## Current output
 ![alt text](img/output.png)
+![alt text](img/output2.png)
