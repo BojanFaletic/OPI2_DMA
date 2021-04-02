@@ -47,7 +47,7 @@ int test_dma() {
   Register DMA_AUTO_GATE_REG{DMA, 0x28};
   Register DMA_STA_REG{DMA, 0x30};
 
-  u32 channel = 5;
+  u32 channel = 1;
   u32 channel_offset = channel * 0x40 + 0x100;
 
   Register DMA_EN_REG{DMA, channel_offset};
@@ -84,7 +84,7 @@ int test_dma() {
   srcArray[2] = 'l';
   srcArray[3] = 'l';
   srcArray[4] = 'o';
-  srcArray[5] = ' ';
+  srcArray[5] = '_';
   srcArray[6] = 'w';
   srcArray[7] = 'o';
   srcArray[8] = 'r';
@@ -93,7 +93,7 @@ int test_dma() {
   srcArray[11] = 0;
 
   // reset dma
-  reset_DMA(BUS_SOFT_RST_REG0);
+  //reset_DMA(BUS_SOFT_RST_REG0);
 
   // DMA ///////////////
   void* offset_ptr = reinterpret_cast<void*> (reinterpret_cast<u64>(virt_page_cb) + 0x40);
@@ -101,7 +101,7 @@ int test_dma() {
   u32 stop_addr = 0xfffff800;
 
   sunxi_dma_lli *cb1 = reinterpret_cast<sunxi_dma_lli *>(virt_page_cb);
-  cb1->cfg = 0;
+  cb1->cfg = (1<<0) | (1<<16); //SET src and destination to DRAM
   cb1->src = (u32)phy_page_src;
   cb1->dst = (u32)phy_page_dst;
   cb1->len = 12;
@@ -113,6 +113,11 @@ int test_dma() {
   // follow block diagram
   // enable DMA
   // disable pause
+  while( !(DMA_STA_REG == 0)){
+    usleep(10000);
+    std::cout << "print sleeping\r";
+    reset_DMA(BUS_SOFT_RST_REG0);
+  }
 
   #if 1
   // write channel descriptor
