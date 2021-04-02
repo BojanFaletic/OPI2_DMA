@@ -40,29 +40,21 @@ void unmapPeripheral(u32 *address) {
 }
 
 void makeVirtPhysPage(void **virtAddr, void **physAddr) {
-  // allocate 1 page on RAM
-  *virtAddr = static_cast<u8 *>(valloc(PAGE_SIZE));
+  *virtAddr = valloc(PAGE_SIZE); // allocate one page of RAM
 
-  // force page into RAM and then lock it there
-  static_cast<u8 *>(*virtAddr)[0] = 1;
-
-  // lock page
+  // force page into RAM and then lock it there:
+  ((int *)*virtAddr)[0] = 1;
   mlock(*virtAddr, PAGE_SIZE);
+  memset(*virtAddr, 0, PAGE_SIZE); // zero-fill the page for convenience
 
-  // write zeros to page
-  memset(*virtAddr, 0, PAGE_SIZE);
-
-  // Determine the phyiscal address for this page
+  // Magic to determine the physical address for this page:
   uint64_t pageInfo;
   int file = open("/proc/self/pagemap", 'r');
-  off_t offset = reinterpret_cast<off_t>(virtAddr) / PAGE_SIZE * 8;
-
-  lseek(file, offset, SEEK_SET);
+  lseek(file, ((size_t)*virtAddr) / PAGE_SIZE * 8, SEEK_SET);
   read(file, &pageInfo, 8);
 
-  *physAddr = reinterpret_cast<u8 *>(pageInfo * PAGE_SIZE);
-
-  printf("makeVirtPhsPage: %p -> %p\n", *virtAddr, *physAddr);
+  *physAddr = (void *)(size_t)(pageInfo * PAGE_SIZE);
+  printf("makeVirtPhysPage virtual to phys: %p -> %p\n", *virtAddr, *physAddr);
 }
 
 void freeVirtPhysPage(void *virtAddr) {
@@ -70,8 +62,6 @@ void freeVirtPhysPage(void *virtAddr) {
   free(virtAddr);
 }
 
-u32 address_to_value(void *v) {
-  return reinterpret_cast<u64>(v) & 0xffffffff;
-}
+u32 address_to_value(void *v) { return reinterpret_cast<u64>(v) & 0xffffffff; }
 
 u32 *value_to_address(u32 v) { return reinterpret_cast<u32 *>(v); }

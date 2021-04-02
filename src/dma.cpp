@@ -114,11 +114,13 @@ int test_dma() {
   // enable DMA
   // disable pause
 
+  #if 1
   // write channel descriptor
   DMA_SEC_REG[channel] = 1;
+
+  cout << "----------------------  Write Descriptor  ----------------\n";
   DMA_DESC_ADDR_REG = (u32)(phy_page_cb);
-
-  usleep(100);
+  usleep(10000);
   cout << "DMA_STA_REG: " << DMA_STA_REG << endl;
   cout << "DMA_EN_REG: " << DMA_EN_REG << endl;
   cout << "DMA_PAU_REG: " << DMA_EN_REG << endl;
@@ -131,9 +133,27 @@ int test_dma() {
   cout << "DMA_FDESC_ADDR_REG: " << DMA_FDESC_ADDR_REG << endl;
   cout << "DMA_PKG_NUM_REG: " << DMA_PKG_NUM_REG << endl;
 
+  cout << "----------------------  Enable Channel  ----------------\n";
   DMA_EN_REG = 1;
-  usleep(100);
-  cout << "---------------------------\n";
+  usleep(10000);
+  cout << "DMA_STA_REG: " << DMA_STA_REG << endl;
+  cout << "DMA_EN_REG: " << DMA_EN_REG << endl;
+  cout << "DMA_PAU_REG: " << DMA_EN_REG << endl;
+  cout << "DMA_DESC_ADDR_REG: " << DMA_DESC_ADDR_REG << endl;
+  cout << "DMA_DFG_REG: " << DMA_CFG_REG << endl;
+  cout << "DMA_CUR_SRC_REG: " << DMA_CUR_SRC_REG << endl;
+  cout << "DMA_CUR_DEST_REG: " << DMA_CUR_DEST_REG << endl;
+  cout << "DMA_BCNT_LEFT_REG: " << DMA_BCNT_LEFT_REG << endl;
+  cout << "DMA_PARA_REG: " << DMA_PARA_REG << endl;
+  cout << "DMA_FDESC_ADDR_REG: " << DMA_FDESC_ADDR_REG << endl;
+  cout << "DMA_PKG_NUM_REG: " << DMA_PKG_NUM_REG << endl;
+
+  cout << "----------------------  Start Channel  ----------------\n";
+  if (DMA_STA_REG == 0x20){
+    std::cout << " Resume dma\n";
+    DMA_PAU_REG = 0;
+  }
+  usleep(10000);
   cout << "DMA_STA_REG: " << DMA_STA_REG << endl;
   cout << "DMA_EN_REG: " << DMA_EN_REG << endl;
   cout << "DMA_PAU_REG: " << DMA_EN_REG << endl;
@@ -148,7 +168,7 @@ int test_dma() {
 
 
 
-  sleep(1);
+  sleep(5);
 
   // check if msg arrived
   cout << "Send: " << srcArray << endl;
@@ -156,6 +176,7 @@ int test_dma() {
   cout << "Send debug: " << static_cast<char *>(virt_page_dst) << endl;
   cout << Hexdump(virt_page_dst, 64) << std::endl;
   /////////////////////
+  #endif
 
   freeVirtPhysPage(virt_page_src);
   freeVirtPhysPage(virt_page_dst);
