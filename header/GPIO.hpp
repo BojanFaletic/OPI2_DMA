@@ -5,6 +5,7 @@
 #include "register.hpp"
 
 class GPIO {
+    HW_unit GPIO_HW{HW::GPIO_BASE};
 public:
   GPIO();
 
