@@ -43,17 +43,18 @@ void makeVirtPhysPage(void **virtAddr, void **physAddr) {
   *virtAddr = valloc(PAGE_SIZE); // allocate one page of RAM
 
   // force page into RAM and then lock it there:
-  ((int *)*virtAddr)[0] = 1;
+  static_cast<int *>(*virtAddr)[0] = 1;
   mlock(*virtAddr, PAGE_SIZE);
   memset(*virtAddr, 0, PAGE_SIZE); // zero-fill the page for convenience
 
   // Magic to determine the physical address for this page:
   uint64_t pageInfo;
   int file = open("/proc/self/pagemap", 'r');
-  lseek(file, ((size_t)*virtAddr) / PAGE_SIZE * 8, SEEK_SET);
+  lseek(file, (reinterpret_cast<size_t>(*virtAddr)) / PAGE_SIZE * 8, SEEK_SET);
   read(file, &pageInfo, 8);
 
-  *physAddr = (void *)(size_t)(pageInfo * PAGE_SIZE);
+  *physAddr =
+      reinterpret_cast<void *>((static_cast<size_t>(pageInfo * PAGE_SIZE)));
   printf("makeVirtPhysPage virtual to phys: %p -> %p\n", *virtAddr, *physAddr);
 }
 

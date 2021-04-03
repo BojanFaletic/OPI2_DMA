@@ -11,10 +11,11 @@
 
 class Register : protected Bit{
 protected:
-  volatile u32 *phy_address;
+  volatile u32 *phy_address = nullptr;
 
 public:
-  Register(HW_unit &hw, u32 offset);
+  Register(HW_unit  &hw, u32 offset);
+  Register(u32 offset);
   Register(u32 *address);
   ~Register();
 

@@ -33,3 +33,11 @@ https://github.com/Wallacoloo/Raspberry-Pi-DMA-Example/blob/master/dma-gpio.c
 
 ## Current output
 For now simple mem2mem works
+
+
+### H2 data-sheet important pages
+* Clock domains are visible on page: 88
+* DMA bloc clock domain: 191
+
+### Video codec
+http://linux-sunxi.org/Cedrus

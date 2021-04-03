@@ -21,7 +21,7 @@ CXXFLAGS:=$(CXXFLAGS) -Werror -Wall -Wextra -Wconversion -Wunreachable-code \
 	-Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wunused
 
 # for testing
-CXXFLAGS= -Wall -Wextra
+#CXXFLAGS= -Wall -Wextra
 
 
 # COMMANDS

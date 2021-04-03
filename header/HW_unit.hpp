@@ -9,6 +9,8 @@ private:
   u32 *phy_address;
 
 public:
+  HW_unit();
+  HW_unit(HW_unit &h, u32 base_address);
   HW_unit(u32 base_address);
   ~HW_unit();
 
