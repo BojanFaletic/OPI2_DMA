@@ -1,5 +1,4 @@
-#ifndef DMA_HPP__
-#define DMA_HPP__
+#pragma once
 
 #include "constants.hpp"
 #include "hexdump.hpp"
@@ -136,5 +135,3 @@ public:
     freeVirtPhysPage(virt_page_cb);
   }
 };
-
-#endif

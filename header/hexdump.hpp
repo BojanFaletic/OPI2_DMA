@@ -1,10 +1,9 @@
-#ifndef HEXDUMP_HPP
-#define HEXDUMP_HPP
+#pragma once
 
+#include "constants.hpp"
 #include <cctype>
 #include <iomanip>
 #include <ostream>
-#include "constants.hpp"
 
 template <unsigned RowSize, bool ShowAscii> struct CustomHexdump {
   CustomHexdump(void *data, unsigned length)
@@ -46,5 +45,3 @@ std::ostream &operator<<(std::ostream &out,
 }
 
 typedef CustomHexdump<16, true> Hexdump;
-
-#endif // HEXDUMP_HPP

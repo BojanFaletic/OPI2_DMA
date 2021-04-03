@@ -1,16 +1,14 @@
-#ifndef GPIO_HPP__
-#define GPIO_HPP__
+#pragma once
 
-#include "HW_unit.hpp"
 #include "register.hpp"
 
 class GPIO {
-    HW_unit GPIO_HW{HW::GPIO_BASE};
+private:
+  Register<HW::GPIO_BASE, 0x00> PN_CFG0;
+
 public:
   GPIO();
 
   void write();
   u32 read();
 };
-
-#endif

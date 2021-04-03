@@ -1,12 +1,11 @@
-#ifndef BIT_HPP__
-#define BIT_HPP__
+#pragma once
 
 #include "constants.hpp"
 #include <iostream>
 
 class Bit {
 private:
-  virtual void write(u32) =0;
+  virtual void write(u32) = 0;
   virtual u32 read() = 0;
   void set(u32 bit_num);
   void clear(u32 bit_num);
@@ -20,5 +19,3 @@ public:
   friend std::ostream &operator<<(std::ostream &os, Bit &b);
   friend bool operator==(Bit &b, u32 value);
 };
-
-#endif
