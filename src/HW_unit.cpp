@@ -16,4 +16,4 @@ HW_unit::~HW_unit() {
   }
 }
 
-u32 *HW_unit::address() { return phy_address; }
+u32 *HW_unit::address() const { return phy_address; }

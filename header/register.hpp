@@ -14,7 +14,7 @@ protected:
   volatile u32 *phy_address = nullptr;
 
 public:
-  Register(HW_unit  &hw, u32 offset);
+  Register(HW_unit const &hw, u32 offset);
   Register(u32 offset);
   Register(u32 *address);
   ~Register();

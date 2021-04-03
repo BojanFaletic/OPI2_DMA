@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Register::Register(HW_unit &hw, u32 offset) {
+Register::Register(HW_unit const &hw, u32 offset) {
   assertm(offset < PAGE_SIZE, "Offset is larger than one page of memory");
   phy_address = reinterpret_cast<volatile u32 *>(
       reinterpret_cast<u64>(hw.address()) + offset);
@@ -21,7 +21,7 @@ Register &Register::operator=(const u32 value) {
   return *this;
 }
 
-Bit &Register::operator[](u32 bit_num){
+Bit &Register::operator[](u32 bit_num) {
   this->bit_mask = bit_num;
   return *this;
 }

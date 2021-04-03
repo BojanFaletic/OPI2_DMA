@@ -14,7 +14,7 @@ public:
   HW_unit(u32 base_address);
   ~HW_unit();
 
-  u32* address();
+  u32 *address() const;
 };
 
 #endif
